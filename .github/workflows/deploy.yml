@@ -13,7 +13,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           passphrase: ${{ secrets.HOST_PASSWORD }}
-          key: ${{ HOST_PRIVATE_KEY }}
+          key: ${{ secrets.HOST_PRIVATE_KEY }}
           source: "docker-compose.yml"
           target: "/srv/nephrolog-api/"
 
@@ -23,5 +23,5 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           passphrase: ${{ secrets.HOST_PASSWORD }}
-          key: ${{ HOST_PRIVATE_KEY }}
+          key: ${{ secrets.HOST_PRIVATE_KEY }}
           script: docker stack deploy nephrolog-api --compose-file /srv/nephrolog-api/docker-compose.yml
