@@ -1,0 +1,27 @@
+name: Deploy to production
+on: push
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy docker-compose file for deployement
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          passphrase: ${{ secrets.HOST_PASSWORD }}
+          key: ${{ HOST_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "/srv/nephrolog-api/"
+
+      - name: Deploy to production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          passphrase: ${{ secrets.HOST_PASSWORD }}
+          key: ${{ HOST_PRIVATE_KEY }}
+          script: docker stack deploy nephrolog-api --compose-file /srv/nephrolog-api/docker-compose.yml
