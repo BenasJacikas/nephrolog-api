@@ -1,0 +1,80 @@
+syntax = "proto3";
+package google.protobuf;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Nephrolog.Protobuf";
+
+
+service Api {
+  // https://cloud.google.com/apis/design/design_patterns#list_pagination
+  rpc ListDailyIntakes(DailyIntakesRequest) returns (ListDailyIntakesResponse);
+
+  rpc ProductsLookup(ProductsLookupRequest) returns (ListProductsLookupResponse);
+}
+
+message DailyIntakesRequest {
+  string parent = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message Product {
+  int64 id = 1;
+  string name = 2;
+
+  enum Kind {
+    UNKNOWN = 0;
+    FOOD = 1;
+    DRINK = 2;
+  }
+
+  Kind kind = 3;
+}
+
+message Intake {
+  int64 id = 1;
+
+  google.protobuf.Timestamp date = 2;
+  Product product = 3;
+
+  int32 amount_g = 4;
+
+  float consumed_potassium_mg = 5;
+  float consumed_protein_g = 6;
+  float consumed_sodium_mg = 7;
+  float consumed_phosphorus_mg = 8;
+  float consumed_energy_kcal = 9;
+  float consumed_water_ml = 10;
+}
+
+message DailyIntakes {
+    google.protobuf.Timestamp date = 1;
+
+    float total_potassium_mg = 2;
+    float total_protein_g = 3;
+    float total_sodium_mg = 4;
+    float total_phosphorus_mg = 5;
+    float total_energy_kcal = 6;
+    float total_water_ml = 7;
+
+    repeated Intake intakes = 8;
+}
+
+message ListDailyIntakesResponse {
+  repeated DailyIntakes daily_intakes = 1;
+  string next_page_token = 2;
+}
+
+message ProductsLookupRequest {
+  string parent = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+
+  string query = 4;
+}
+
+message ListProductsLookupResponse {
+  repeated Product products = 1;
+  string next_page_token = 2;
+}

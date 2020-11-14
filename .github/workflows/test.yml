@@ -1,0 +1,21 @@
+name: Test
+on: push
+
+jobs:
+  test:
+    name: Test proto constract generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+
+      - name: Generate proto contract for C#
+        run: protoc --csharp_out=. contract.proto  
+
+      - uses: actions/upload-artifact@v2
+        name: Upload Contract.cs
+        with:
+          name: Contract.cs
+          path: Contract.cs
